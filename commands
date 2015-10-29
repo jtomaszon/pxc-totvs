@@ -1,0 +1,23 @@
+### Network issues
+iptables -A INPUT -s 192.168.70.10 -j DROP; iptables -A OUTPUT -s 192.168.70.10;
+
+iptables -A INPUT -s 192.168.70.10 -j DROP; iptables -A OUTPUT -s 192.168.70.10;
+iptables -A INPUT -s 192.168.70.20 -j DROP; iptables -A OUTPUT -s 192.168.70.20;
+
+### No internet connection
+sudo service network restart
+
+
+### Sysbench
+cd /usr/share/doc/sysbench
+
+sysbench --test=/usr/share/doc/sysbench/tests/db/parallel_prepare.lua --mysql-host=192.168.70.100 --mysql-user=sysb --mysql-password=sysb --mysql-db=employees --oltp-tables-count=64 --num-threads=8 run
+
+sysbench --test=/usr/share/doc/sysbench/tests/db/parallel_prepare.lua --mysql-host=192.168.70.100 --mysql-user=sysb --mysql-password=sysb --mysql-db=employees --oltp-tables-count=64 --num-threads=8 cleanup
+
+sysbench --mysql-host=192.168.70.100 --mysql-user=sysb --mysql-password=sysb --mysql-db=employees --test=/usr/share/doc/sysbench/tests/db/oltp.lua --oltp-tables-count=25 --num-threads=5 run
+
+sysbench --mysql-host=192.168.70.100 --mysql-user=sysb --mysql-password=sysb --mysql-db=employees --test=/usr/share/doc/sysbench/tests/db/oltp.lua --oltp-tables-count=64 --mysql-table-engine=innodb --db-ps-mode=disable --mysql-engine-trx=yes --oltp-read-only --oltp-skip-trx --oltp-dist-type=special --oltp-reconnect-mode=query --oltp-connect-delay=0 --max-requests=0 --max-time=0 --report-interval=1 --num-threads=100 run
+
+sysbench --mysql-host=192.168.70.100 --mysql-user=sysb --mysql-password=sysb --mysql-db=employees --test=/usr/share/doc/sysbench/tests/db/update_index.lua --oltp-tables-count=16 --oltp-table-size=1000000 --num-threads=8 --max-requests=0 --max-time=0 --report-interval=1 --oltp-auto-inc=off --rand-init=on --rand-type=uniform --oltp-read-only --oltp-reconnect-mode=query run
+

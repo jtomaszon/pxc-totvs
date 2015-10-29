@@ -3,3 +3,8 @@
 # Example .gitignore files: https://github.com/github/gitignore
 /bower_components/
 /node_modules/
+/rpms/
+/test_db/
+/myq_gadgets/
+/express-mysql/
+/.vagrant/
